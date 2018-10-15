@@ -58,7 +58,18 @@ def mutate_codon(codon, aa_to_codon, codon_to_aa):
     Randomly selects a codon that will have the most changes while 
     preserving the amino acid
     '''
-    pass
+    changes_to_codons = collections.defaultdict(list)
+    amino_acid = codon_to_aa[codon]
+    new_codons = aa_to_codon[amino_acid]
+    
+    for new_codon in new_codons:
+        changes = sum([1 for i,j in zip(codon, new_codon) if i!=j])
+        changes_to_codons[changes].append(new_codon)
+    
+    # randomly choose from the codons that have highest number of changes
+    max_changes = max(changes_to_codons.keys())
+    new_codon = random.choice(changes_to_codons[max_changes])
+    return new_codon
 
 def mutate_n_codons(wt_sequence, shuffled_sequence, aa_to_codon, codon_to_aa, n):
     '''
